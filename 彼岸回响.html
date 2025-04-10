@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>彼岸回响</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'SimSun', '宋体', serif;
+      background-color: #300000; /* 暗红色背景 */
+      color: #ff3333;
+      height: 100vh;
+      overflow: hidden;
+      text-align: center;
+      text-shadow: 0 0 8px #ff0000;
+      background-image: 
+        radial-gradient(circle at 20% 30%, rgba(255,0,0,0.1) 0%, transparent 30%),
+        radial-gradient(circle at 80% 70%, rgba(255,0,0,0.1) 0%, transparent 30%);
+    }
+
+    #start-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+      transition: opacity 2s;
+    }
+
+    #start-screen p {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+      color: #ff6666;
+      animation: flicker 3s infinite alternate;
+    }
+
+    #start-button {
+      background: transparent;
+      border: 1px solid #ff3333;
+      color: #ff3333;
+      padding: 0.8rem 2rem;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    #start-button:hover {
+      background: #ff3333;
+      color: #000;
+      box-shadow: 0 0 15px #ff0000;
+    }
+
+    #main-screen {
+      display: none;
+      width: 100%;
+      height: 100%;
+      position: relative;
+      padding-top: 20vh;
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 3rem;
+      letter-spacing: 0.5rem;
+      animation: glow 2s infinite alternate;
+    }
+
+    #input-container {
+      margin: 2rem auto;
+      max-width: 400px;
+    }
+
+    #target-name {
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid #ff3333;
+      color: #fff;
+      padding: 1rem;
+      font-size: 1.2rem;
+      width: 100%;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    #send-button {
+      background: #ff3333;
+      color: #000;
+      border: none;
+      padding: 1rem 3rem;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: bold;
+    }
+
+    #send-button:hover {
+      background: #ff0000;
+      box-shadow: 0 0 20px #ff0000;
+      transform: scale(1.05);
+    }
+
+    #message {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2rem;
+      opacity: 0;
+      color: #ff3333;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 2rem;
+      border-radius: 5px;
+    }
+
+    .blood-drop {
+      position: absolute;
+      background: #ff0000;
+      width: 3px;
+      height: 10px;
+      opacity: 0.7;
+      animation: drip 5s linear infinite;
+    }
+
+    @keyframes flicker {
+      0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+        opacity: 1;
+      }
+      20%, 22%, 24%, 55% {
+        opacity: 0.5;
+      }
+    }
+
+    @keyframes glow {
+      from {
+        text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000;
+      }
+      to {
+        text-shadow: 0 0 10px #ff0000, 0 0 20px #ff3333, 0 0 30px #ff6666;
+      }
+    }
+
+    @keyframes drip {
+      0% {
+        transform: translateY(-100px);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.7;
+      }
+      90% {
+        opacity: 0.7;
+      }
+      100% {
+        transform: translateY(100vh);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="start-screen">
+    <p>该网站纯属娱乐，切勿代入现实</p>
+    <button id="start-button" onclick="showMainScreen()">我已知晓</button>
+  </div>
+
+  <div id="main-screen">
+    <h1>彼岸回响</h1>
+    <div id="input-container">
+      <input type="text" id="target-name" placeholder="输入所怨恨之人的名字">
+      <button id="send-button" onclick="send怨愤()">确定</button>
+    </div>
+    <div id="message"></div>
+  </div>
+
+  <script>
+    function showMainScreen() {
+      document.getElementById('start-screen').style.display = 'none';
+      document.getElementById('main-screen').style.display = 'block';
+      createBloodDrops();
+    }
+
+    function createBloodDrops() {
+      for (let i = 0; i < 20; i++) {
+        setTimeout(() => {
+          const drop = document.createElement('div');
+          drop.className = 'blood-drop';
+          drop.style.left = Math.random() * 100 + 'vw';
+          drop.style.animationDelay = Math.random() * 5 + 's';
+          document.body.appendChild(drop);
+        }, i * 300);
+      }
+    }
+
+    function send怨愤() {
+      var targetName = document.getElementById('target-name').value;
+      if (targetName) {
+        document.getElementById('message').innerHTML = "已收到...";
+        document.getElementById('message').style.opacity = '1';
+        document.getElementById('message').style.transition = 'opacity 1s';
+        
+        // 添加红色闪光效果
+        document.body.style.backgroundColor = '#ff0000';
+        setTimeout(() => {
+          document.body.style.backgroundColor = '#300000';
+          document.body.style.transition = 'background-color 1s';
+        }, 300);
+        
+        setTimeout(function() {
+          window.close();
+        }, 3000);
+      } else {
+        alert('请输入所怨恨之人的名字');
+      }
+    }
+  </script>
+</body>
+<script>
+    function showMainScreen() {
+      document.getElementById('start-screen').style.opacity = '0';
+      setTimeout(() => {
+        document.getElementById('start-screen').style.display = 'none';
+        document.getElementById('main-screen').style.display = 'block';
+      }, 1000);
+      
+      createSpiritParticles();
+    }
+
+    // 创建灵魂粒子的函数保持不变...
+
+    function send怨愤() {
+      const targetName = document.getElementById('target-name').value;
+      if (targetName) {
+        // 先显示发送中的状态
+        document.getElementById('message').innerHTML = "正在连接彼岸...";
+        document.getElementById('message').style.opacity = '1';
+
+        // 3秒后显示最终消息
+        setTimeout(() => {
+          document.getElementById('message').innerHTML = "你的怨恨，我已收到...";
+          
+          // 继续执行关闭操作
+          setTimeout(function() {
+            window.close();
+          }, 2000); // 显示消息后2秒关闭
+
+        }, 3000); // 3秒延迟
+
+        // 闪光效果保持原样...
+        // 粒子效果保持原样...
+
+      } else {
+        alert('请输入所怨恨之人的名字');
+        document.getElementById('target-name').style.animation = 'none';
+        setTimeout(() => {
+          document.getElementById('target-name').style.animation = 'shake 0.5s';
+        }, 10);
+      }
+    }
+</script>
+</html>
